@@ -1,7 +1,7 @@
 /**
  * @prettier
  */
-import { FaLongArrowAltDown, FaPencilAlt, FaTimes } from 'react-icons/fa';
+import { FaPencilAlt, FaTimes } from 'react-icons/fa';
 import Link from 'next/link';
 import Image from 'next/image';
 import Layout from '@/components/Layout';
@@ -41,14 +41,23 @@ export default function EventPage({ evt }) {
 				</div>
 
 				<span>
-					{evt.date} at {evt.time}
+					{new Date(
+						evt.date
+					).toLocaleDateString(
+						'en-us'
+					)}{' '}
+					at {evt.time}
 				</span>
 				<h1>{evt.name}</h1>
 				{evt.image && (
 					<div className={styles.image}>
 						<Image
 							src={
-								evt.image
+								evt
+									.image
+									.formats
+									.medium
+									.url
 							}
 							width={
 								960
@@ -78,7 +87,7 @@ export default function EventPage({ evt }) {
 }
 
 export async function getStaticPaths() {
-	const res = await fetch(`${API_URL}/api/events`);
+	const res = await fetch(`${API_URL}/events`);
 	const events = await res.json();
 
 	const paths = events.map((evt) => ({
@@ -92,7 +101,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-	const res = await fetch(`${API_URL}/api/events/${slug}`);
+	const res = await fetch(`${API_URL}/events?slug=${slug}`);
 	const events = await res.json();
 	return {
 		props: { evt: events[0] },
