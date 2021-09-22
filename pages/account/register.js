@@ -18,11 +18,19 @@ export default function RegisterPage() {
 
 	const { register, error } = useContext(AuthContext);
 
+	useEffect(() => error && toast.error(error));
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
+		if (username.length < 3) {
+			toast.error(
+				'Username must be at least 3 characters!'
+			);
+		}
+
 		if (password !== passwordConfirm) {
-			toast.error('Passwords do not match');
+			toast.error('Passwords do not match!');
 			return;
 		}
 		register({ username, email, password });
