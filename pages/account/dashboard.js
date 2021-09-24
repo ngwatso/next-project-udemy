@@ -7,7 +7,7 @@ import { parseCookies } from '@/helpers/index';
 import { API_URL } from '@/config/index';
 import styles from '@/styles/Dashboard.module.css';
 
-export default function DashboardPage({ events }) {
+export default function DashboardPage({ events, token }) {
 	const deleteEvent = (id) => {
 		console.log(id);
 	};
@@ -45,6 +45,6 @@ export async function getServerSideProps({ req }) {
 	const events = await res.json();
 
 	return {
-		props: { events },
+		props: { events, token },
 	};
 }
